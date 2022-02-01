@@ -104,6 +104,8 @@ const SimpleBreathing: React.FC = () => {
     setBreathMessage(null);
     setTextEffect(null);
     setCircleEffect(null);
+    BREATH_IN_AUDIO.pause();
+    BREATH_OUT_AUDIO.pause();
     if (intervalIdRef.current) clearInterval(intervalIdRef.current);
   };
 
