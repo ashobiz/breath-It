@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './simpleBreathing.module.scss';
-import { BiPlay } from 'react-icons/bi';
+import { BiPlay, BiStop } from 'react-icons/bi';
 import {
   BREATH_IN,
+  BREATH_IN_AUDIO,
   BREATH_OUT,
+  BREATH_OUT_AUDIO,
   INITIAL_DELAY,
   SIMPLE_INITIAL_MESSAGE,
   SIMPLE_TIMING,
@@ -11,10 +13,7 @@ import {
   START_MESSAGE,
   TEXT_EFFECT_TIMING,
 } from '../../constants';
-
-// Audio files
-var breath_in = new Audio(require('./../../audio/breath-in.mp3'));
-var breath_out = new Audio(require('./../../audio/breath-out.mp3'));
+import Timer from '../timer/timer';
 
 const SimpleBreathing: React.FC = () => {
   const [started, setStarted] = useState<Boolean>(false);
@@ -24,36 +23,10 @@ const SimpleBreathing: React.FC = () => {
   const [breathMessage, setBreathMessage] = useState<Boolean | null>(null); // Breath in (true) & Breath out (false)
   const [textEffect, setTextEffect] = useState<Boolean | null>(null); // For text transition
   const [circleEffect, setCircleEffect] = useState<Boolean | null>(null); // For circle transition
-  const [timer, setTimer] = useState<String>('00:00'); // For circle transition
 
   const handleStart = (): void => {
     setStarted(true);
   };
-
-  let clock: NodeJS.Timer;
-
-  // Creating a clock with seconds and minutes using setinterval
-  const startTimer = (): void => {
-    let mins: number = 0;
-    let seconds: number = 0;
-    clock = setInterval(() => {
-      if (seconds < 60) {
-        seconds++;
-      } else {
-        seconds = 0;
-        mins++;
-      }
-      let finalTime: String;
-      finalTime = mins < 10 ? '0' + mins.toString() : mins.toString();
-      finalTime =
-        finalTime +
-        ':' +
-        (seconds < 10 ? '0' + seconds.toString() : seconds.toString());
-      setTimer(finalTime);
-    }, 1000);
-  };
-
-  let intervalId: NodeJS.Timer;
 
   // I am using setInterval, after every few seconds, we are running the interval function and
   // it will change our state from true to false and vice versa. Here we need use closure to let our interval function
@@ -62,10 +35,11 @@ const SimpleBreathing: React.FC = () => {
 
   let breathTemp: Boolean = true;
 
+  let intervalIdRef = useRef<NodeJS.Timer>();
+
   const startBreathing = (): void => {
-    startTimer(); // For clock
     setBreathMessage(true);
-    intervalId = setInterval(() => {
+    const id = setInterval(() => {
       if (breathTemp) {
         setBreathMessage(false);
         breathTemp = false;
@@ -74,6 +48,7 @@ const SimpleBreathing: React.FC = () => {
         breathTemp = true;
       }
     }, SIMPLE_TIMING);
+    intervalIdRef.current = id;
   };
 
   // Text transition effects
@@ -89,11 +64,11 @@ const SimpleBreathing: React.FC = () => {
   // Circle transition effects
   useEffect(() => {
     if (breathMessage === true) {
-      breath_in.play();
+      BREATH_IN_AUDIO.play();
       setCircleEffect(true);
     }
     if (breathMessage === false) {
-      breath_out.play();
+      BREATH_OUT_AUDIO.play();
       setCircleEffect(false);
     }
   }, [breathMessage]);
@@ -101,10 +76,9 @@ const SimpleBreathing: React.FC = () => {
   // Clearing the interval on unmount
   useEffect(() => {
     return () => {
-      clearInterval(intervalId);
-      clearInterval(clock);
+      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
     };
-  });
+  }, []);
 
   useEffect(() => {
     // After clicking start button, I am showing different message one after the other. At the end it will become 'null'.
@@ -122,6 +96,16 @@ const SimpleBreathing: React.FC = () => {
       }, 0);
     }
   }, [started]);
+
+  // Stopping the exercise by setting everytying to original value
+  const handleStop = (): void => {
+    setStarted(false);
+    setStartMessage(SIMPLE_INITIAL_MESSAGE);
+    setBreathMessage(null);
+    setTextEffect(null);
+    setCircleEffect(null);
+    if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+  };
 
   return (
     <div className={styles.simple}>
@@ -163,7 +147,14 @@ const SimpleBreathing: React.FC = () => {
             )}
           </div>
           {/* Timer */}
-          {!startMessage && <div className={styles.timer}>{timer}</div>}
+          {!startMessage && <Timer />}
+          {!startMessage && (
+            <div className={styles.stop} onClick={handleStop}>
+              <span>
+                <BiStop />
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

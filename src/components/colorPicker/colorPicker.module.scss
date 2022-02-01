@@ -1,0 +1,39 @@
+.color_picker {
+  position: fixed;
+  bottom: 0;
+  width: 200px;
+  height: 45px;
+  background-color: #fff;
+  left: 50%;
+  transform: translateX(-100px);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0px 0px 15px #999;
+  text-align: center;
+  > span {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 15px 5px;
+    border-radius: 100%;
+    cursor: pointer;
+    &:nth-child(1) {
+      background-color: #ff6363;
+    }
+    &:nth-child(2) {
+      background-color: #96ceb4;
+    }
+    &:nth-child(3) {
+      background-color: #d22779;
+    }
+    &:nth-child(4) {
+      background-color: #dacc96;
+    }
+    &:nth-child(5) {
+      background-color: #f3c5c5;
+    }
+    &:nth-child(6) {
+      background-color: #1572a1;
+    }
+  }
+}
