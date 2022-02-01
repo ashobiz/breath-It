@@ -12,6 +12,10 @@ import {
   TEXT_EFFECT_TIMING,
 } from '../../constants';
 
+// Audio files
+var breath_in = new Audio(require('./../../audio/breath-in.mp3'));
+var breath_out = new Audio(require('./../../audio/breath-out.mp3'));
+
 const SimpleBreathing: React.FC = () => {
   const [started, setStarted] = useState<Boolean>(false);
   const [startMessage, setStartMessage] = useState<String | null>(
@@ -20,9 +24,33 @@ const SimpleBreathing: React.FC = () => {
   const [breathMessage, setBreathMessage] = useState<Boolean | null>(null); // Breath in (true) & Breath out (false)
   const [textEffect, setTextEffect] = useState<Boolean | null>(null); // For text transition
   const [circleEffect, setCircleEffect] = useState<Boolean | null>(null); // For circle transition
+  const [timer, setTimer] = useState<String>('00:00'); // For circle transition
 
   const handleStart = (): void => {
     setStarted(true);
+  };
+
+  let clock: NodeJS.Timer;
+
+  // Creating a clock with seconds and minutes using setinterval
+  const startTimer = (): void => {
+    let mins: number = 0;
+    let seconds: number = 0;
+    clock = setInterval(() => {
+      if (seconds < 60) {
+        seconds++;
+      } else {
+        seconds = 0;
+        mins++;
+      }
+      let finalTime: String;
+      finalTime = mins < 10 ? '0' + mins.toString() : mins.toString();
+      finalTime =
+        finalTime +
+        ':' +
+        (seconds < 10 ? '0' + seconds.toString() : seconds.toString());
+      setTimer(finalTime);
+    }, 1000);
   };
 
   let intervalId: NodeJS.Timer;
@@ -35,6 +63,7 @@ const SimpleBreathing: React.FC = () => {
   let breathTemp: Boolean = true;
 
   const startBreathing = (): void => {
+    startTimer(); // For clock
     setBreathMessage(true);
     intervalId = setInterval(() => {
       if (breathTemp) {
@@ -60,16 +89,21 @@ const SimpleBreathing: React.FC = () => {
   // Circle transition effects
   useEffect(() => {
     if (breathMessage === true) {
+      breath_in.play();
       setCircleEffect(true);
     }
     if (breathMessage === false) {
+      breath_out.play();
       setCircleEffect(false);
     }
   }, [breathMessage]);
 
-  // Clearing the interval on mount
+  // Clearing the interval on unmount
   useEffect(() => {
-    return clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      clearInterval(clock);
+    };
   });
 
   useEffect(() => {
@@ -128,6 +162,8 @@ const SimpleBreathing: React.FC = () => {
               </div>
             )}
           </div>
+          {/* Timer */}
+          {!startMessage && <div className={styles.timer}>{timer}</div>}
         </div>
       </div>
     </div>
