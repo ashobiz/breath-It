@@ -42,12 +42,12 @@
           &.circle_large {
             width: 120px;
             height: 120px;
-            transition: all 5s ease-in;
+            transition: all 4.5s ease-in;
           }
           &.circle_small {
             width: 15px;
             height: 15px;
-            transition: all 5s ease-in;
+            transition: all 4.5s ease-in;
           }
         }
       }
@@ -64,6 +64,11 @@
       .transition_out {
         opacity: 0;
         transition: all 2s ease-out;
+      }
+      .timer {
+        margin-top: 20px;
+        color: #fff;
+        font-size: 70px;
       }
     }
   }
