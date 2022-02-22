@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/breath-It/static/css/main.79fa07b9.css",
-    "main.js": "/breath-It/static/js/main.ad29db98.js",
+    "main.js": "/breath-It/static/js/main.764c65a2.js",
     "static/media/breath-in.mp3": "/breath-It/static/media/breath-in.9d3ec5acf715bc9c7214.mp3",
     "static/media/breath-out.mp3": "/breath-It/static/media/breath-out.ea4925c441b9086a1a83.mp3",
     "static/media/hold.mp3": "/breath-It/static/media/hold.ad71cd4751ced6a417d6.mp3",
     "index.html": "/breath-It/index.html",
     "main.79fa07b9.css.map": "/breath-It/static/css/main.79fa07b9.css.map",
-    "main.ad29db98.js.map": "/breath-It/static/js/main.ad29db98.js.map"
+    "main.764c65a2.js.map": "/breath-It/static/js/main.764c65a2.js.map"
   },
   "entrypoints": [
     "static/css/main.79fa07b9.css",
-    "static/js/main.ad29db98.js"
+    "static/js/main.764c65a2.js"
   ]
 }
