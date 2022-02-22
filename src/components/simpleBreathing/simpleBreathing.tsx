@@ -11,11 +11,17 @@ import {
   SIMPLE_TIMING,
   SIT_CONFORTABLE,
   START_MESSAGE,
-  TEXT_EFFECT_TIMING,
+  SIMPLE_TEXT_EFFECT_TIMING,
+  SIMPLE,
 } from '../../constants';
 import Timer from '../timer/timer';
+import { breathingTypes } from '../../App';
 
-const SimpleBreathing: React.FC = () => {
+type simpleBreathingProps = {
+  handleState: (type: breathingTypes) => void;
+};
+
+const SimpleBreathing: React.FC<simpleBreathingProps> = ({ handleState }) => {
   const [started, setStarted] = useState<Boolean>(false);
   const [startMessage, setStartMessage] = useState<String | null>(
     SIMPLE_INITIAL_MESSAGE
@@ -57,7 +63,7 @@ const SimpleBreathing: React.FC = () => {
       setTextEffect(true);
       setTimeout(() => {
         setTextEffect(false);
-      }, TEXT_EFFECT_TIMING);
+      }, SIMPLE_TEXT_EFFECT_TIMING);
     }
   }, [breathMessage]);
 
@@ -107,59 +113,56 @@ const SimpleBreathing: React.FC = () => {
     BREATH_IN_AUDIO.pause();
     BREATH_OUT_AUDIO.pause();
     if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    handleState(SIMPLE);
   };
 
   return (
-    <div className={styles.simple}>
-      <div className={styles.outer}>
-        <div className={styles.inner}>
-          {!started ? (
-            <div className={styles.play_icon} onClick={handleStart}>
-              <BiPlay />
-            </div>
-          ) : (
-            <div className={styles.breath_circle}>
-              <div
-                className={`${styles.breath_circle_inner} ${
-                  circleEffect ? styles.circle_large : styles.circle_small
-                }`}
-              ></div>
-            </div>
-          )}
-          {/* We are displaying intitial message and breath in/out message with transition. That is why we are having many conditions */}
-          <div className={styles.message}>
-            {startMessage ? (
-              startMessage
-            ) : breathMessage ? (
-              <div
-                className={
-                  textEffect ? styles.transition_in : styles.transition_out
-                }
-              >
-                {BREATH_IN}
-              </div>
-            ) : (
-              <div
-                className={
-                  textEffect ? styles.transition_in : styles.transition_out
-                }
-              >
-                {BREATH_OUT}
-              </div>
-            )}
-          </div>
-          {/* Timer */}
-          {!startMessage && <Timer />}
-          {!startMessage && (
-            <div className={styles.stop} onClick={handleStop}>
-              <span>
-                <BiStop />
-              </span>
-            </div>
-          )}
+    <>
+      {!started ? (
+        <div className={styles.play_icon} onClick={handleStart}>
+          <BiPlay />
         </div>
+      ) : (
+        <div className={styles.breath_circle}>
+          <div
+            className={`${styles.breath_circle_inner} ${
+              circleEffect ? styles.circle_large : styles.circle_small
+            }`}
+          ></div>
+        </div>
+      )}
+      {/* We are displaying intitial message and breath in/out message with transition. That is why we are having many conditions */}
+      <div className={styles.message}>
+        {startMessage ? (
+          startMessage
+        ) : breathMessage ? (
+          <div
+            className={
+              textEffect ? styles.transition_in : styles.transition_out
+            }
+          >
+            {BREATH_IN}
+          </div>
+        ) : (
+          <div
+            className={
+              textEffect ? styles.transition_in : styles.transition_out
+            }
+          >
+            {BREATH_OUT}
+          </div>
+        )}
       </div>
-    </div>
+      {/* Timer */}
+      {!startMessage && <Timer />}
+      {!startMessage && (
+        <div className={styles.stop} onClick={handleStop}>
+          <span>
+            <BiStop />
+          </span>
+        </div>
+      )}
+    </>
   );
 };
 

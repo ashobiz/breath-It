@@ -1,3 +1,46 @@
 body {
   background-color: burlywood;
+  .simple {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .outer {
+      width: 400px;
+      height: 400px;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      .inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        .intro {
+          color: #fff;
+          h1 {
+            font-size: 35px;
+            line-height: 45px;
+            font-weight: normal;
+          }
+          span {
+            display: inline-block;
+            cursor: pointer;
+            margin: 10px;
+            border: 3px solid #fff;
+            padding: 10px;
+            text-transform: uppercase;
+            box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0);
+            transition: all 0.5s ease;
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.1);
+            }
+          }
+        }
+      }
+    }
+  }
 }
