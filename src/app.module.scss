@@ -24,6 +24,10 @@ body {
             font-size: 35px;
             line-height: 45px;
             font-weight: normal;
+            @media (max-width: 500px) {
+              font-size: 25px;
+              line-height: 35px;
+            }
           }
           span {
             display: inline-block;
@@ -35,6 +39,9 @@ body {
             box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1);
             background-color: rgba(0, 0, 0, 0);
             transition: all 0.5s ease;
+            @media (max-width: 500px) {
+              display: block;
+            }
             &:hover {
               background-color: rgba(0, 0, 0, 0.1);
             }
