@@ -37,11 +37,11 @@ const App: React.FC = () => {
             {!state.simple && !state.box && (
               <div className={styles.intro}>
                 <h1>{INTRO_HEADING}</h1>
-                <span onClick={() => handleState(SIMPLE)}>
-                  {SIMPLE_INITIAL_MESSAGE}
-                </span>
                 <span onClick={() => handleState(BOX)}>
                   {BOX_INITIAL_MESSAGE}
+                </span>
+                <span onClick={() => handleState(SIMPLE)}>
+                  {SIMPLE_INITIAL_MESSAGE}
                 </span>
               </div>
             )}
