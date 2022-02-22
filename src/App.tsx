@@ -45,8 +45,8 @@ const App: React.FC = () => {
                 </span>
               </div>
             )}
-            {state.simple && <SimpleBreathing handleState={handleState} />}
             {state.box && <BoxBreathing handleState={handleState} />}
+            {state.simple && <SimpleBreathing handleState={handleState} />}
           </div>
         </div>
       </div>
