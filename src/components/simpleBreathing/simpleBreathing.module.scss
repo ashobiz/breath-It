@@ -1,82 +1,61 @@
-.simple {
-  height: 100vh;
+.play_icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  font-size: 85px;
+  line-height: 140px;
+  color: #333;
+  background-color: #fff;
+  cursor: pointer;
+}
+.breath_circle {
+  width: 120px;
+  height: 120px;
+  border: 1px solid #fff;
+  border-radius: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  .outer {
-    width: 400px;
-    height: 400px;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    .inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      .play_icon {
-        width: 120px;
-        height: 120px;
-        border-radius: 100%;
-        font-size: 85px;
-        line-height: 140px;
-        color: #333;
-        background-color: #fff;
-        cursor: pointer;
-      }
-      .breath_circle {
-        width: 120px;
-        height: 120px;
-        border: 1px solid #fff;
-        border-radius: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .breath_circle_inner {
-          width: 15px;
-          height: 15px;
-          background-color: #fff;
-          border-radius: 100%;
-          &.circle_large {
-            width: 120px;
-            height: 120px;
-            transition: all 4.5s ease-in;
-          }
-          &.circle_small {
-            width: 15px;
-            height: 15px;
-            transition: all 4.5s ease-in;
-          }
-        }
-      }
-      .message {
-        color: #fff;
-        margin-top: 15px;
-        font-size: 23px;
-        font-weight: 500;
-      }
-      .transition_in {
-        opacity: 1;
-        transition: all 0.75s ease-in;
-      }
-      .transition_out {
-        opacity: 0;
-        transition: all 2s ease-out;
-      }
-      .stop {
-        width: 60px;
-        height: 60px;
-        margin-top: 15px;
-        border: 1px solid #fff;
-        border-radius: 100%;
-        text-align: center;
-        color: #fff;
-        font-size: 40px;
-        line-height: 70px;
-        cursor: pointer;
-      }
+  .breath_circle_inner {
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border-radius: 100%;
+    &.circle_large {
+      width: 120px;
+      height: 120px;
+      transition: all 4.5s ease-in;
+    }
+    &.circle_small {
+      width: 15px;
+      height: 15px;
+      transition: all 4.5s ease-in;
     }
   }
+}
+.message {
+  color: #fff;
+  margin-top: 15px;
+  font-size: 23px;
+  font-weight: 500;
+}
+.transition_in {
+  opacity: 1;
+  transition: all 0.75s ease-in;
+}
+.transition_out {
+  opacity: 0;
+  transition: all 2s ease-out;
+}
+.stop {
+  width: 60px;
+  height: 60px;
+  margin-top: 15px;
+  border: 1px solid #fff;
+  border-radius: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 40px;
+  line-height: 70px;
+  cursor: pointer;
 }
