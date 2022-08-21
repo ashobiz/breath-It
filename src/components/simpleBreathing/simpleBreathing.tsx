@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styles from './simpleBreathing.module.scss';
-import { BiPlay, BiStop } from 'react-icons/bi';
+import React, { useEffect, useRef, useState } from "react";
+import styles from "./simpleBreathing.module.scss";
+import { BiPlay, BiStop } from "react-icons/bi";
 import {
   BREATH_IN,
   BREATH_IN_AUDIO,
@@ -13,9 +13,9 @@ import {
   START_MESSAGE,
   SIMPLE_TEXT_EFFECT_TIMING,
   SIMPLE,
-} from '../../constants';
-import Timer from '../timer/timer';
-import { breathingTypes } from '../../App';
+} from "../../constants";
+import Timer from "../timer/timer";
+import { breathingTypes } from "../../App";
 
 type simpleBreathingProps = {
   handleState: (type: breathingTypes) => void;
@@ -29,6 +29,8 @@ const SimpleBreathing: React.FC<simpleBreathingProps> = ({ handleState }) => {
   const [breathMessage, setBreathMessage] = useState<Boolean | null>(null); // Breath in (true) & Breath out (false)
   const [textEffect, setTextEffect] = useState<Boolean | null>(null); // For text transition
   const [circleEffect, setCircleEffect] = useState<Boolean | null>(null); // For circle transition
+  const [inhaleTiming, setInhaleTiming] = useState<number>(SIMPLE_TIMING);
+  const [exhaleTiming, setExhaleTiming] = useState<number>(SIMPLE_TIMING);
 
   const handleStart = (): void => {
     setStarted(true);
@@ -41,20 +43,24 @@ const SimpleBreathing: React.FC<simpleBreathingProps> = ({ handleState }) => {
 
   let breathTemp: Boolean = true;
 
-  let intervalIdRef = useRef<NodeJS.Timer>();
+  let intervalIdRefs = useRef<(NodeJS.Timer | undefined)[]>();
 
   const startBreathing = (): void => {
     setBreathMessage(true);
-    const id = setInterval(() => {
-      if (breathTemp) {
+    const inhaleId = setInterval(() => {
+      setBreathMessage(true);
+      breathTemp = true;
+    }, inhaleTiming + exhaleTiming);
+    let exhaleId: NodeJS.Timer | undefined;
+    setTimeout(() => {
+      setBreathMessage(false);
+      breathTemp = false;
+      exhaleId = setInterval(() => {
         setBreathMessage(false);
         breathTemp = false;
-      } else {
-        setBreathMessage(true);
-        breathTemp = true;
-      }
-    }, SIMPLE_TIMING);
-    intervalIdRef.current = id;
+      }, inhaleTiming + exhaleTiming);
+    }, inhaleTiming);
+    intervalIdRefs.current = [inhaleId, exhaleId];
   };
 
   // Text transition effects
@@ -82,7 +88,10 @@ const SimpleBreathing: React.FC<simpleBreathingProps> = ({ handleState }) => {
   // Clearing the interval on unmount
   useEffect(() => {
     return () => {
-      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+      if (intervalIdRefs.current)
+        intervalIdRefs.current.forEach(
+          (timer) => timer && clearInterval(timer)
+        );
     };
   }, []);
 
@@ -112,22 +121,47 @@ const SimpleBreathing: React.FC<simpleBreathingProps> = ({ handleState }) => {
     setCircleEffect(null);
     BREATH_IN_AUDIO.pause();
     BREATH_OUT_AUDIO.pause();
-    if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    if (intervalIdRefs.current)
+      intervalIdRefs.current.forEach((timer) => timer && clearInterval(timer));
     handleState(SIMPLE);
   };
 
   return (
     <>
       {!started ? (
-        <div className={styles.play_icon} onClick={handleStart}>
-          <BiPlay />
-        </div>
+        <>
+          <div className={styles.play_icon} onClick={handleStart}>
+            <BiPlay />
+          </div>
+          <label className={styles.message}>Inhale seconds</label>
+          <input
+            name="inhaleTiming"
+            id="inhaleTiming"
+            value={inhaleTiming === 0 ? "" : inhaleTiming / 1000}
+            type="number"
+            onChange={(e) => setInhaleTiming(Number(e.target.value) * 1000)}
+            className={styles.input}
+          />
+          <label className={styles.message}>Exhale seconds</label>
+          <input
+            name="exhaleTiming"
+            value={exhaleTiming === 0 ? "" : exhaleTiming / 1000}
+            type="number"
+            onChange={(e) => setExhaleTiming(Number(e.target.value) * 1000)}
+            className={styles.input}
+          />
+        </>
       ) : (
         <div className={styles.breath_circle}>
           <div
             className={`${styles.breath_circle_inner} ${
               circleEffect ? styles.circle_large : styles.circle_small
             }`}
+            style={{
+              transition: circleEffect
+                ? `all ${inhaleTiming / 1000}s ease-in`
+                : `all ${exhaleTiming / 1000}s ease-in`,
+            }}
           ></div>
         </div>
       )}

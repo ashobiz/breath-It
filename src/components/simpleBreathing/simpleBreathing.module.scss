@@ -24,12 +24,10 @@
     &.circle_large {
       width: 120px;
       height: 120px;
-      transition: all 4.5s ease-in;
     }
     &.circle_small {
       width: 15px;
       height: 15px;
-      transition: all 4.5s ease-in;
     }
   }
 }
@@ -58,4 +56,29 @@
   font-size: 40px;
   line-height: 70px;
   cursor: pointer;
+}
+.input {
+  border: 3px solid #fff;
+  padding: 10px;
+  background: none;
+  color: #fff;
+  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0);
+  transition: all 0.5s ease;
+  font-size: 18px;
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    outline: 0;
+  }
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
